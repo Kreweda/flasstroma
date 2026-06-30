@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wiadomosci - Flashscore</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eceff3;
+      color: #111827;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .topbar {
+      background: #07111d;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 24px));
+      margin: 0 auto;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: conic-gradient(#ff0046, #ff6b8a, #ff0046);
+      box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.18);
+    }
+
+    .nav {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .nav a,
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: #c5ced8;
+      padding: 20px 11px 17px;
+      border-bottom: 3px solid transparent;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav .active {
+      color: #fff;
+      border-color: #ff0046;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 24px));
+      margin: 14px auto 30px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    .panel-title {
+      margin: 0;
+      padding: 12px;
+      background: #f6f7f9;
+      border-bottom: 1px solid #dfe3e8;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .panel-body {
+      padding: 12px;
+    }
+
+    .intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .intro p {
+      margin: 4px 0 0;
+      color: #69727d;
+      font-weight: 700;
+    }
+
+    .primary-btn,
+    .danger-btn,
+    .ghost-btn {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .primary-btn {
+      background: #ff0046;
+      color: #fff;
+    }
+
+    .danger-btn {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .ghost-btn {
+      background: #eef1f5;
+      color: #38424f;
+    }
+
+    .news-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .news-item {
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .news-item h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+    }
+
+    .news-item p {
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .news-date {
+      display: block;
+      margin-top: 9px;
+      color: #8a94a3;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .empty {
+      margin: 0;
+      color: #69727d;
+      line-height: 1.45;
+    }
+
+    .admin-box {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .admin-box.active {
+      display: block;
+    }
+
+    .admin-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .admin-form input,
+    .admin-form textarea {
+      width: 100%;
+      border: 1px solid #dfe3e8;
+      border-radius: 6px;
+      padding: 10px;
+      background: #fff;
+      color: #111827;
+    }
+
+    .admin-form textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .login-error {
+      display: none;
+      margin: 0;
+      color: #dc2626;
+      font-weight: 800;
+    }
+
+    .login-error.active {
+      display: block;
+    }
+
+    .admin-news-list {
+      margin-top: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner,
+      .intro {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .nav a,
+      .nav button {
+        padding: 14px 10px 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">
+        <span class="logo-mark"></span>
+        <span>Flashscore</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Mecz</a>
+        <a class="active" href="wiadomosci.html">Wiadomosci</a>
+        <button id="openAdminBtn" type="button">Panel admina</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card intro">
+      <div>
+        <h1>Wiadomosci</h1>
+        <p>Najnowsze informacje dodane przez panel admina.</p>
+      </div>
+      <button id="adminShortcutBtn" class="primary-btn" type="button">Panel admina</button>
+    </section>
+
+    <section class="card">
+      <h2 class="panel-title">Lista wiadomosci</h2>
+      <div class="panel-body">
+        <div id="newsList" class="news-list"></div>
+      </div>
+    </section>
+
+    <section id="adminBox" class="card admin-box">
+      <h2 class="panel-title">Panel admina</h2>
+
+      <div class="panel-body">
+        <form id="loginForm" class="admin-form">
+          <input id="loginInput" type="text" placeholder="Login" autocomplete="username" required />
+          <input id="passwordInput" type="password" placeholder="Haslo" autocomplete="current-password" required />
+          <p id="loginError" class="login-error">Zly login albo haslo.</p>
+          <div class="admin-actions">
+            <button class="primary-btn" type="submit">Zaloguj</button>
+            <button id="closeAdminBtn" class="ghost-btn" type="button">Zamknij</button>
+          </div>
+        </form>
+
+        <div id="adminPanel" class="admin-box">
+          <form id="newsForm" class="admin-form">
+            <input id="newsTitle" type="text" placeholder="Tytul wiadomosci" required />
+            <textarea id="newsContent" placeholder="Tresc wiadomosci" required></textarea>
+            <div class="admin-actions">
+              <button class="primary-btn" type="submit">Dodaj wiadomosc</button>
+              <button id="logoutBtn" class="ghost-btn" type="button">Wyloguj</button>
+            </div>
+          </form>
+
+          <div id="adminNewsList" class="news-list admin-news-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "flashscoreNews";
+    const ADMIN_LOGIN = "admin";
+    const ADMIN_PASSWORD = "12345@";
+
+    const openAdminBtn = document.getElementById("openAdminBtn");
+    const adminShortcutBtn = document.getElementById("adminShortcutBtn");
+    const closeAdminBtn = document.getElementById("closeAdminBtn");
+    const adminBox = document.getElementById("adminBox");
+    const loginForm = document.getElementById("loginForm");
+    const loginInput = document.getElementById("loginInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const loginError = document.getElementById("loginError");
+    const adminPanel = document.getElementById("adminPanel");
+    const newsForm = document.getElementById("newsForm");
+    const newsTitle = document.getElementById("newsTitle");
+    const newsContent = document.getElementById("newsContent");
+    const newsList = document.getElementById("newsList");
+    const adminNewsList = document.getElementById("adminNewsList");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function getNews() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+
+    function saveNews(news) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(news));
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderNews() {
+      const news = getNews();
+
+      if (news.length === 0) {
+        newsList.innerHTML = '<p class="empty">Nie ma jeszcze zadnych wiadomosci.</p>';
+        adminNewsList.innerHTML = '<p class="empty">Nie ma jeszcze czego usuwac.</p>';
+        return;
+      }
+
+      newsList.innerHTML = news.map((item) => `
+        <article class="news-item">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.content)}</p>
+          <span class="news-date">${escapeHtml(item.date)}</span>
+        </article>
+      `).join("");
+
+      adminNewsList.innerHTML = news.map((item, index) => `
+        <article class="news-item">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.content)}</p>
+          <span class="news-date">${escapeHtml(item.date)}</span>
+          <button class="danger-btn" type="button" onclick="deleteNews(${index})">Usun</button>
+        </article>
+      `).join("");
+    }
+
+    function openAdmin() {
+      adminBox.classList.add("active");
+      adminBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeAdmin() {
+      adminBox.classList.remove("active");
+      loginError.classList.remove("active");
+    }
+
+    function showLoggedInPanel() {
+      loginForm.style.display = "none";
+      adminPanel.classList.add("active");
+      localStorage.setItem("flashscoreAdminLogged", "yes");
+    }
+
+    function showLoginPanel() {
+      loginForm.style.display = "grid";
+      adminPanel.classList.remove("active");
+      localStorage.removeItem("flashscoreAdminLogged");
+      loginInput.value = "";
+      passwordInput.value = "";
+    }
+
+    function deleteNews(index) {
+      const news = getNews();
+      news.splice(index, 1);
+      saveNews(news);
+      renderNews();
+    }
+
+    openAdminBtn.addEventListener("click", openAdmin);
+    adminShortcutBtn.addEventListener("click", openAdmin);
+    closeAdminBtn.addEventListener("click", closeAdmin);
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (loginInput.value === ADMIN_LOGIN && passwordInput.value === ADMIN_PASSWORD) {
+        loginError.classList.remove("active");
+        showLoggedInPanel();
+        return;
+      }
+
+      loginError.classList.add("active");
+    });
+
+    newsForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const news = getNews();
+      const today = new Date().toLocaleDateString("pl-PL", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+
+      news.unshift({
+        title: newsTitle.value.trim(),
+        content: newsContent.value.trim(),
+        date: today
+      });
+
+      saveNews(news);
+      newsTitle.value = "";
+      newsContent.value = "";
+      renderNews();
+    });
+
+    logoutBtn.addEventListener("click", showLoginPanel);
+
+    if (localStorage.getItem("flashscoreAdminLogged") === "yes") {
+      showLoggedInPanel();
+    }
+
+    renderNews();
+  </script>
+</body>
+</html>
