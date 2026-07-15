@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashscore Stromej /title>
-
+  <title>Flashscore style - mecze</title>
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -78,53 +79,6 @@ body.dark .rank,
 body.dark .tag {
   background: #243244;
   color: #e5e7eb;
-}
-    body.dark .match-list,
-body.dark .matches,
-body.dark .match-row,
-body.dark .match,
-body.dark .event,
-body.dark .match-card,
-body.dark .league,
-body.dark .match-state {
-  background: #172033 !important;
-  color: #e5e7eb !important;
-  border-color: #2c3a50 !important;
-}
-
-body.dark .match-row *,
-body.dark .match *,
-body.dark .event *,
-body.dark .match-card * {
-  background: transparent !important;
-}
-
-body.dark .match-row,
-body.dark .match,
-body.dark .event {
-  border-bottom: 1px solid #2c3a50 !important;
-}
-
-body.dark a {
-  color: #c084fc;
-}
-
-body.dark .status,
-body.dark .score,
-body.dark .score-tag {
-  color: #ff2f68 !important;
-}
-
-body.dark .team-name,
-body.dark .event-text,
-body.dark strong {
-  color: #f8fafc !important;
-}
-
-body.dark .event-time,
-body.dark .team-meta,
-body.dark .event-note {
-  color: #a8b3c3 !important;
 }
 
     body {
@@ -1036,44 +990,181 @@ body.dark .event-note {
         flex-direction: row;
       }
     }
+  
+    .nav a {
+      color: #c5ced8;
+      text-decoration: none;
+    }
+
+    .nav span.active a,
+    .nav .active {
+      color: #fff;
+    }
+
+    .home-hero {
+      padding: 18px;
+      background: linear-gradient(135deg, #07111d, #243244);
+      color: #fff;
+    }
+
+    .home-hero h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .home-hero p {
+      margin: 7px 0 0;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    .match-board {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .match-link {
+      display: grid;
+      grid-template-columns: 74px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 72px;
+      padding: 12px;
+      border: 1px solid #edf0f3;
+      border-radius: 8px;
+      background: #fff;
+      color: inherit;
+      text-decoration: none;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .match-link:hover {
+      transform: translateY(-1px);
+      border-color: #ff0046;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, .10);
+    }
+
+    .match-link.featured {
+      border-color: rgba(255, 0, 70, .32);
+      background: linear-gradient(90deg, #fff, #fff5f8);
+    }
+
+    .match-mini-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: #69727d;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .match-pill {
+      border-radius: 999px;
+      background: #ffe5ec;
+      color: #d8003d;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .match-list-row {
+      width: 100%;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    body.dark .home-title,
+    body.dark .league,
+    body.dark .match-link,
+    body.dark .match-list-row {
+      background: #172033 !important;
+      border-color: #2c3a50 !important;
+      color: #e5e7eb !important;
+    }
+
+    body.dark .match-link.featured {
+      background: linear-gradient(90deg, #172033, #211827) !important;
+    }
+
+    body.dark .match-team.winner,
+    body.dark .match-score,
+    body.dark .team-name,
+    body.dark .event-text,
+    body.dark strong {
+      color: #f8fafc !important;
+    }
+
+    body.dark .match-time,
+    body.dark .match-mini-meta,
+    body.dark .team-meta,
+    body.dark .event-time,
+    body.dark .event-note,
+    body.dark .score-tag,
+    body.dark .score-sub {
+      color: #a8b3c3 !important;
+    }
+
+    body.dark .match-pill {
+      background: #3b1020;
+      color: #ff7aa0;
+    }
+
+    @media (max-width: 560px) {
+      .match-link {
+        grid-template-columns: 54px 1fr;
+      }
+
+      .match-link .match-status {
+        grid-column: 1 / -1;
+        justify-self: start;
+      }
+    }
   </style>
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="logo">
-        <span class="logo-mark"></span>
-        <span>Flashscore</span>
-      </div>
-
-      <nav class="nav">
-        <span class="active">Wyniki</span>
-        <span><a href="wiadomosci.html">Wiadomości</a></span>
-        <span><a href="wyniki.html">Wyniki Zawodów</a></span>
-        <span> <a href="zawodnicy.html">Statystki indywidualne</a> </span>
-          <span> <a href="transfery.html">Transfery i kontuzje</a> </span>
-        <button id="themeToggle" class="theme-toggle" type="button" title="Tryb ciemny">☾</button>
-      </nav>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">
+      <span class="logo-mark"></span>
+      <span>Flashscore</span>
     </div>
-  </header>
 
+    <nav class="nav">
+      <span class="active"><a href="index.html">Wyniki</a></span>
+      <span><a href="wiadomosci.html">Wiadomości</a></span>
+      <span><a href="wyniki.html">Wyniki Zawodów</a></span>
+      <span><a href="zawodnicy.html">Statystyki indywidualne</a></span>
+      <span><a href="transfery.html">Transfery i kontuzje</a></span>
+      <button id="themeToggle" class="theme-toggle" type="button" title="Tryb ciemny">☾</button>
+    </nav>
+  </div>
+</header>
   <div class="page">
-    <section id="homePage" class="view-page active">
-      <div class="league">
-        <span>Świat: mecze towarzyskie</span>
-        <span>29.06.2026</span>
-      </div>
+    <section class="card home-hero">
+      <h1>Wyniki meczów</h1>
+      <p>Przejrzysta strona główna z odnośnikami do osobnych podstron meczowych.</p>
+    </section>
 
-           
-      <section class="card">
-        <h1 class="home-title">Wszystkie mecze</h1>
+    <div class="league">
+      <span>Świat: mecze towarzyskie</span>
+      <span>29.06.2026</span>
+    </div>
 
-        <div class="match-list">
-          <button class="match-list-row" type="button" data-open-match>
+    <section class="card">
+      <h2 class="home-title">Wszystkie mecze</h2>
+      <div class="match-board">
+          <a class="match-link featured" href="mecz-ola-pero-koteu-kreweda-vienna.html">
             <span class="match-time">20:55</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Podstrona</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Ola / Pero / Koteu</span>
                 <span class="match-score">6</span>
@@ -1083,716 +1174,125 @@ body.dark .event-note {
                 <span class="match-score">9</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-
-          <!--  <button class="match-list-row" type="button" data-open-match>
-            <span class="match-time">18:30</span>
-
-            <span class="match-teams">
-              <span class="match-team winner">
-                <span>FC Stroma</span>
-                <span class="match-score">3</span>
-              </span>
-              <span class="match-team">
-                <span>KS Brzoza</span>
-                <span class="match-score">1</span>
-              </span>
-            </span>
-
-            <span class="match-status">Koniec</span>
-          </button> -->
-
-       <a href="mecz2.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz2.html">
             <span class="match-time">21:40</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Jugosławianka FC</span>
                 <span class="match-score">2</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Stromianka FC</span>
                 <span class="match-score">3</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-          </a>
-                 <a href="mecz3.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz3.html">
             <span class="match-time">20:30</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Vienna i Luśken</span>
                 <span class="match-score">3</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Koteu i Serduszkowata</span>
                 <span class="match-score">0</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-          <a href="mecz5.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz5.html">
             <span class="match-time">20:30</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Karne</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Kreweda i Pero</span>
                 <span class="match-score">1(1)</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Luśken i Serduszkowata</span>
                 <span class="match-score">1 (0)</span>
               </span>
             </span>
-
             <span class="match-status">Koniec po rzutach karnych</span>
-          </button>
-                 </a>
-          <a href="mecz4.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz4.html">
             <span class="match-time">18:40</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Stromianka FC</span>
                 <span class="match-score">1</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Jugosławianka</span>
                 <span class="match-score">3</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-            <a href="mecz7.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz7.html">
             <span class="match-time">19:30</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Kreweda</span>
                 <span class="match-score">7</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Luśken</span>
                 <span class="match-score">4</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-            <a href="mecz6.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz6.html">
             <span class="match-time">20:00</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Vienna</span>
                 <span class="match-score">2</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Pero</span>
                 <span class="match-score">5</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-            <a href="mecz8.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz8.html">
             <span class="match-time">20:30</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Kreweda</span>
                 <span class="match-score">4</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Ola</span>
                 <span class="match-score">1</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-           <a href="mecz9.html">   <button class="match-list-row" type="button" >
+          </a>          <a class="match-link" href="mecz9.html">
             <span class="match-time">18:45</span>
-
             <span class="match-teams">
+              <span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span>
               <span class="match-team">
                 <span>Kreweda i Luśken</span>
                 <span class="match-score">4</span>
               </span>
-              <span class="match-team">
+              <span class="match-team winner">
                 <span>Vienna</span>
                 <span class="match-score">3</span>
               </span>
             </span>
-
             <span class="match-status">Koniec</span>
-          </button>
-                 </a>
-        </div>
-      </section>
-    </section>
-
-    <section id="matchPage" class="view-page">
-      <button class="back-button" type="button" id="backToHome">← Wszystkie mecze</button>
-
-      <section class="card">
-        <div class="match-state">
-          <span>Stadion na ul. Stromej</span>
-          <span class="status">Koniec</span>
-        </div>
-
-        <div class="scoreboard">
-          <div class="team">
-            <div class="crest home-crest">OPK</div>
-            <div>
-              <div class="team-name">Ola / Pero / Koteu</div>
-              <div class="team-meta">FIFA: 6. • 2 zawodników</div>
-            </div>
-          </div>
-
-          <div class="score">
-            <div class="score-main">6 - 9</div>
-            <div class="score-sub">Po 90 minutach</div>
-          </div>
-
-          <div class="team">
-            <div class="crest away-crest">KV</div>
-            <div>
-              <div class="team-name">Kreweda / Vienna</div>
-              <div class="team-meta">FIFA: 18. • 2 zawodników</div>
-            </div>
-          </div>
-        </div>
-
-        <nav class="tabs">
-          <button class="tab active" type="button" data-tab="match">Mecz</button>
-          <button class="tab" type="button" data-tab="lineups">Składy</button>
-          <button class="tab" type="button" data-tab="stats">Statystyki</button>
-          <button class="tab" type="button" data-tab="report">Raport</button>
-          <button class="tab" type="button" data-tab="h2h">H2H</button>
-        </nav>
-      </section>
-
-      <div class="layout">
-        <main class="card">
-          <section id="match" class="tab-view active">
-            <h2 class="panel-title">Wydarzenia meczu</h2>
-
-            <div class="panel-body">
-              <div class="period">1. połowa</div>
-
-              <div class="event away">
-                <div class="event-time">10'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">pierwszy gol meczu</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">0-1</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">16'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">drugi gol gości</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">0-2</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">22'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">trzeci gol gości</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">0-3</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">28'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">czwarty gol gości</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">0-4</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">33'</div>
-                <div class="event-main">
-                  <span class="icon yellow">!</span>
-                  <span class="event-text">Ola<span class="event-note">żółta kartka</span></span>
-                </div>
-                <div></div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">38'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Pero<span class="event-note">pierwszy gol gospodarzy</span></span>
-                </div>
-                <div class="score-tag">1-4</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">43'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Pero<span class="event-note">drugi gol gospodarzy</span></span>
-                </div>
-                <div class="score-tag">2-4</div>
-              </div>
-
-              <div class="period">2. połowa</div>
-
-              <div class="event">
-                <div class="event-time">47'</div>
-                <div class="event-main">
-                  <span class="icon sub">↔</span>
-                  <span class="event-text">Pero → Koteu<span class="event-note">zmiana</span></span>
-                </div>
-                <div></div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">52'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">piąty gol gości</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">2-5</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">57'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">szósty gol gości</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">2-6</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">62'</div>
-                <div class="event-main">
-                  <span class="event-text">Kreweda<span class="event-note">gol i żółta kartka</span></span>
-                  <span class="icon goal">G</span>
-                  <span class="icon yellow">!</span>
-                </div>
-                <div class="score-tag">2-7</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">68'</div>
-                <div class="event-main">
-                  <span class="icon miss">x</span>
-                  <span class="event-text">Koteu<span class="event-note">niewykorzystany rzut karny</span></span>
-                </div>
-                <div></div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">73'</div>
-                <div class="event-main">
-                  <span class="icon miss">x</span>
-                  <span class="event-text">Koteu<span class="event-note">drugi niewykorzystany rzut karny</span></span>
-                </div>
-                <div></div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">76'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Koteu<span class="event-note">pierwszy gol po wejściu</span></span>
-                </div>
-                <div class="score-tag">3-7</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">79'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Koteu<span class="event-note">drugi gol Koteu</span></span>
-                </div>
-                <div class="score-tag">4-7</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">82'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Koteu<span class="event-note">trzeci gol Koteu</span></span>
-                </div>
-                <div class="score-tag">5-7</div>
-              </div>
-
-              <div class="event">
-                <div class="event-time">85'</div>
-                <div class="event-main">
-                  <span class="icon goal">G</span>
-                  <span class="event-text">Koteu<span class="event-note">czwarty gol Koteu</span></span>
-                </div>
-                <div class="score-tag">6-7</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">88'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">ósmy gol i MVP meczu</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">6-8</div>
-              </div>
-
-              <div class="event away">
-                <div class="event-time">90+2'</div>
-                <div class="event-main">
-                  <span class="event-text">Vienna<span class="event-note">zamknięcie wyniku</span></span>
-                  <span class="icon goal">G</span>
-                </div>
-                <div class="score-tag">6-9</div>
-              </div>
-            </div>
-          </section>
-
-          <section id="lineups" class="tab-view">
-            <h2 class="panel-title">Składy</h2>
-
-            <div class="panel-body">
-              <div class="lineups-header">
-                <div class="line-team">
-                  <span class="mini-crest home-crest">OPK</span>
-                  <span>Ola / Pero / Koteu</span>
-                </div>
-
-                <span class="formation-badge">2 vs 2</span>
-
-                <div class="line-team away">
-                  <span>Kreweda / Vienna</span>
-                  <span class="mini-crest away-crest">KV</span>
-                </div>
-              </div>
-
-              <div class="pitch">
-                <div class="player" style="left:34%;top:77%;">
-                  <img class="player-photo" src="116 (1).jpg" alt="Ola" />
-                  <span class="name">Ola</span>
-                  <span class="player-actions">
-                    <span class="action card-yellow">!</span>
-                  </span>
-                  <span class="rating rating-red">5.4</span>
-                </div>
- <div class="player" style="left:66%;top:66%;">
-                  <img class="player-photo" src="117.jpg" alt="Koteu" />
-                  <span class="name">Pero</span>
-                  <span class="player-actions">
-                  
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                      <span class="action goal">⚽</span>
-                    <span class="action sub-in">↙️</span>
-                  </span>
-                  <span class="rating rating-dark-green">7.0</span>
-                </div>
-                <div class="player" style="left:66%;top:66%;">
-                  <img class="player-photo" src="116.jpg" alt="Koteu" />
-                  <span class="name">Koteu</span>
-                  <span class="player-actions">
-                    <span class="action missed-penalty">x</span>
-                    <span class="action missed-penalty">x</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action sub-in">↗️</span>
-                  </span>
-                  <span class="rating rating-dark-green">8.4</span>
-                </div>
-
-                <div class="player" style="left:34%;top:34%;">
-                  <span class="rating rating-yellow">6.7</span>
-                  <span class="player-actions">
-                    <span class="action goal">⚽</span>
-                    <span class="action card-yellow">!</span>
-                  </span>
-                  <span class="name">Kreweda</span>
-                  <img class="player-photo" src="10203a2f-3b65-4df0-a5fb-15dbdc0024cf.jpg" alt="Kreweda" />
-                </div>
-
-                <div class="player" style="left:66%;top:23%;">
-                  <span class="rating rating-blue">9.8</span>
-                  <span class="player-actions">
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                    <span class="action goal">⚽</span>
-                  </span>
-                  <span class="name">Vienna <span class="mvp-star">★</span></span>
-                  <img class="player-photo" src="116 (2).jpg" alt="Vienna" />
-                </div>
-              </div>
-
-              <div class="bench">
-                <div class="list">
-                  <div class="list-head">
-                    <span>Ola / Pero / Koteu</span>
-                    <span>Oceny</span>
-                  </div>
-
-                  <div class="row">
-                    <img class="row-photo" src="116 (1).jpg" alt="Ola" />
-                    <div>
-                      <strong>Ola</strong>
-                      <span><span class="action card-yellow">!</span> żółta kartka</span>
-                    </div>
-                    <span class="rating rating-red">5.4</span>
-                  </div>
-
-                  <div class="row">
-                    <img class="row-photo" src="116.jpg" alt="Koteu" />
-                    <div>
-                      <strong>Koteu</strong>
-                      <span>
-                        <span class="action missed-penalty">x</span>
-                        <span class="action missed-penalty">x</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        4 gole • 2 karne nietrafione
-                      </span>
-                    </div>
-                    <span class="rating rating-dark-green">8.4</span>
-                  </div>
-                </div>
-
-                <div class="list">
-                  <div class="list-head">
-                    <span>Kreweda / Vienna</span>
-                    <span>Oceny</span>
-                  </div>
-
-                  <div class="row">
-                    <img class="row-photo" src="10203a2f-3b65-4df0-a5fb-15dbdc0024cf.jpg" alt="Kreweda" />
-                    <div>
-                      <strong>Kreweda</strong>
-                      <span>
-                        <span class="action goal">G</span>
-                        <span class="action card-yellow">!</span>
-                        gol • żółta kartka
-                      </span>
-                    </div>
-                    <span class="rating rating-yellow">6.7</span>
-                  </div>
-
-                  <div class="row">
-                    <img class="row-photo" src="116 (2).jpg" alt="Vienna" />
-                    <div>
-                      <strong>Vienna <span class="mvp-star">★</span></strong>
-                      <span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        <span class="action goal">G</span>
-                        8 goli • MVP
-                      </span>
-                    </div>
-                    <span class="rating rating-blue">9.8</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="changed-players">
-                <h3 class="changed-title">Zmienieni zawodnicy</h3>
-
-                <div class="changed-row">
-                  <div class="changed-side">
-                    <div class="changed-player">
-                      <img class="changed-photo" src="117.jpg" alt="Pero" />
-                      <span>Pero</span>
-                      <span class="changed-rating rating-light-green">7.0</span>
-                    </div>
-                    <div class="changed-sub">
-                      <span class="changed-icon">↻</span>
-                      Zszedł 47'
-                    </div>
-                  </div>
-
-                  <div class="changed-side away">
-                    <div class="changed-player">
-                      <span class="changed-rating rating-dark-green">8.4</span>
-                      <span>Koteu</span>
-                      <img class="changed-photo" src="116.jpg" alt="Koteu" />
-                    </div>
-                    <div class="changed-sub">
-                      47' Wszedł
-                      <span class="changed-icon">↻</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="stats" class="tab-view">
-            <h2 class="panel-title">Statystyki</h2>
-
-            <div class="panel-body stats">
-              <div class="stat" style="--home:40%;--away:60%;">
-                <span>40%</span>
-                <span class="bar"></span>
-                <span>60%</span>
-                <div class="stat-label">Posiadanie piłki</div>
-              </div>
-
-              <div class="stat" style="--home:36%;--away:64%;">
-                <span>8</span>
-                <span class="bar"></span>
-                <span>14</span>
-                <div class="stat-label">Strzały</div>
-              </div>
-
-              <div class="stat" style="--home:39%;--away:61%;">
-                <span>7</span>
-                <span class="bar"></span>
-                <span>11</span>
-                <div class="stat-label">Strzały celne</div>
-              </div>
-
-              <div class="stat" style="--home:67%;--away:33%;">
-                <span>4</span>
-                <span class="bar"></span>
-                <span>2</span>
-                <div class="stat-label">Faule</div>
-              </div>
-
-              <div class="stat" style="--home:48%;--away:52%;">
-                <span>84%</span>
-                <span class="bar"></span>
-                <span>92%</span>
-                <div class="stat-label">Celność podań</div>
-              </div>
-            </div>
-          </section>
-
-          <section id="report" class="tab-view">
-            <h2 class="panel-title">Raport</h2>
-
-            <div class="panel-body">
-              <div class="info-row"><span>Rozgrywki</span><strong>Mecz towarzyski</strong></div>
-              <div class="info-row"><span>Stadion</span><strong>Stadion na ul. Stromej</strong></div>
-              <div class="info-row"><span>Sędzia</span><strong>Kitkiana Lulusiowata</strong></div>
-              <div class="info-row"><span>Data</span><strong>29.06.2026, 20:55</strong></div>
-              <div class="info-row"><span>Najlepszy zawodnik</span><strong>Vienna</strong></div>
-            </div>
-          </section>
-
-          <section id="h2h" class="tab-view">
-            <h2 class="panel-title">H2H</h2>
-
-            <div class="panel-body">
-              <div class="info-row"><span>29.06.2026</span><strong>Ola / Pero / Koteu 6 - 9 Kreweda / Vienna</strong></div>
-              <div class="info-row"><span>Bilans</span><strong>0 zwycięstw • 0 remisów • 1 porażka</strong></div>
-            </div>
-          </section>
-        </main>
-
-        <aside class="card side-panel">
-          <div class="side-card">
-            <h3>Najważniejsze</h3>
-            <div class="field-img"></div>
-            <p class="note">
-              Kreweda / Vienna wygrywa po meczu pełnym zwrotów akcji. Vienna został MVP z oceną 9.8,
-              a Koteu zdobył cztery gole mimo dwóch niewykorzystanych rzutów karnych.
-            </p>
-          </div>
-
-          <div class="side-card">
-            <h3>Forma</h3>
-            <div class="info-row"><span>Ola / Pero / Koteu</span><strong>P</strong></div>
-            <div class="info-row"><span>Kreweda / Vienna</span><strong>W</strong></div>
-          </div>
-
-          <div class="side-card">
-            <h3>Informacje</h3>
-            <div class="info-row"><span>Faza</span><strong>mecze towarzyskie</strong></div>
-            <div class="info-row"><span>Czas</span><strong>90 min</strong></div>
-            <div class="info-row"><span>Status</span><strong>Koniec</strong></div>
-          </div>
-        </aside>
+          </a>
       </div>
     </section>
   </div>
 
-  <script>
-    const homePage = document.querySelector("#homePage");
-    const matchPage = document.querySelector("#matchPage");
-    const openMatchButtons = document.querySelectorAll("[data-open-match]");
-    const backToHome = document.querySelector("#backToHome");
-
-    function showHome() {
-      homePage.classList.add("active");
-      matchPage.classList.remove("active");
-      window.location.hash = "";
-    }
-
-    function showMatch() {
-      homePage.classList.remove("active");
-      matchPage.classList.add("active");
-      window.location.hash = "mecz";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    openMatchButtons.forEach((button) => {
-      button.addEventListener("click", showMatch);
-    });
-
-    backToHome.addEventListener("click", showHome);
-
-    if (window.location.hash === "#mecz") {
-      showMatch();
-    }
-
-    const tabs = document.querySelectorAll(".tab");
-    const tabViews = document.querySelectorAll(".tab-view");
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const target = tab.dataset.tab;
-
-        tabs.forEach((item) => {
-          item.classList.toggle("active", item === tab);
-        });
-
-        tabViews.forEach((view) => {
-          view.classList.toggle("active", view.id === target);
-        });
-      });
-    });
-  </script>
-  <script>
+<script>
   const themeToggle = document.getElementById("themeToggle");
 
   function applyTheme(theme) {
@@ -1810,3 +1310,4 @@ body.dark .event-note {
 </script>
 </body>
 </html>
+
