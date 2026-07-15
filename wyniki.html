@@ -9,7 +9,76 @@
     * {
       box-sizing: border-box;
     }
+.theme-toggle {
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  min-width: 42px;
+  height: 34px;
+  cursor: pointer;
+  font-weight: 900;
+  margin-left: 8px;
+}
 
+body.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark .card,
+body.dark .news-item,
+body.dark .player-card,
+body.dark .competition-card,
+body.dark .leader-card,
+body.dark .item,
+body.dark .detail,
+body.dark .list,
+body.dark .row {
+  background: #172033;
+  border-color: #2c3a50;
+  color: #e5e7eb;
+}
+
+body.dark .panel-title,
+body.dark th,
+body.dark .list-head,
+body.dark .leader-card h3,
+body.dark .match-state,
+body.dark .stat,
+body.dark .formation-badge,
+body.dark .period,
+body.dark .league,
+body.dark .admin-form input,
+body.dark .admin-form textarea {
+  background: #111827;
+  border-color: #2c3a50;
+  color: #e5e7eb;
+}
+
+body.dark .intro p,
+body.dark .note,
+body.dark .item-sub,
+body.dark .club-meta,
+body.dark .detail span,
+body.dark .news-date,
+body.dark .news-item p,
+body.dark .player-card span,
+body.dark .info-row span,
+body.dark .row span,
+body.dark .leader-list span,
+body.dark .empty,
+body.dark .empty-info {
+  color: #a8b3c3;
+}
+
+body.dark .club,
+body.dark .number,
+body.dark .rank,
+body.dark .tag {
+  background: #243244;
+  color: #e5e7eb;
+}
     body {
       margin: 0;
       background: #eceff3;
@@ -376,6 +445,7 @@
         <a href="wiadomosci.html">Wiadomosci</a>
         <a href="zawodnicy.html">Zawodnicy</a>
         <a class="active" href="konkursy.html">Konkursy</a>
+        <button id="themeToggle" class="theme-toggle" type="button" title="Tryb ciemny">☾</button>
       </nav>
     </div>
   </header>
@@ -632,6 +702,22 @@
 
     renderCompetitionCards();
   </script>
+  <script>
+  const themeToggle = document.getElementById("themeToggle");
+
+  function applyTheme(theme) {
+    document.body.classList.toggle("dark", theme === "dark");
+    themeToggle.textContent = theme === "dark" ? "☀" : "☾";
+    localStorage.setItem("flasstromaTheme", theme);
+  }
+
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    applyTheme(nextTheme);
+  });
+
+  applyTheme(localStorage.getItem("flasstromaTheme") || "light");
+</script>
 </body>
 </html>
 
