@@ -4,6 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Flashstroma">
+
+<link rel="apple-touch-icon" href="icon-192.png">
   <title>Flashscore style - mecze</title>
   <style>
 
@@ -1306,7 +1314,15 @@ body.dark .tag {
       </div>
     </section>
   </div>
+<button onclick="showInstallInfo()" style="padding:10px 20px;font-size:16px;">
+  📲 Zainstaluj aplikację
+</button>
 
+<script>
+function showInstallInfo() {
+  alert("Na iPhone:\n1. Kliknij Udostępnij\n2. Wybierz 'Do ekranu głównego'\n\nNa Androidzie:\nPojawi się opcja instalacji automatycznie.");
+}
+</script>
 <script>
   const themeToggle = document.getElementById("themeToggle");
 
