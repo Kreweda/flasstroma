@@ -1,7 +1,7 @@
 {
   "name": "Flashstroma",
   "short_name": "Flashstroma",
-  "start_url": "/",
+  "start_url": "/flasstroma/"
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
