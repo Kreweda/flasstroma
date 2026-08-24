@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -100,6 +101,43 @@
     body.dark .card, body.dark .list, body.dark .row, body.dark .back-button { background: #172033; border-color: #2c3a50; color: #e5e7eb; }
     body.dark .panel-title, body.dark .match-state, body.dark .period, body.dark .list-head { background: #111827; border-color: #2c3a50; color: #e5e7eb; }
     body.dark .team-meta, body.dark .score-sub, body.dark .event-time, body.dark .event-note, body.dark .score-tag, body.dark .row span, body.dark .info-row span, body.dark .note { color: #a8b3c3; }
+    /* Profil zawodnika — mały panel otwierany nad widokiem składów. */
+    .player, .row[data-player] { cursor: pointer; }
+    .player:focus-visible, .row[data-player]:focus-visible, .profile-close:focus-visible { outline: 3px solid #ff0046; outline-offset: 3px; }
+    .player-profile-backdrop { display: none; position: fixed; inset: 0; z-index: 30; padding: 20px; place-items: center; background: rgba(7,17,29,.64); }
+    .player-profile-backdrop.open { display: grid; }
+    .player-profile { width: min(100%, 480px); max-height: min(700px, calc(100vh - 40px)); overflow: auto; padding: 18px; border: 1px solid #dfe3e8; border-radius: 12px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.34); }
+    .profile-head { display: flex; align-items: center; gap: 13px; padding-bottom: 15px; border-bottom: 1px solid #edf0f3; }
+    .profile-photo { width: 68px; height: 68px; border: 3px solid #edf0f3; border-radius: 50%; object-fit: cover; background: #111827; }
+    .profile-kicker { margin: 0 0 3px; color: #69727d; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+    .profile-name { margin: 0; font-size: 21px; }
+    .profile-position { margin: 4px 0 0; color: #69727d; font-weight: 700; }
+    .profile-close { width: 34px; height: 34px; margin-left: auto; border: 1px solid #dfe3e8; border-radius: 50%; background: #fff; color: #38424f; cursor: pointer; font-size: 22px; line-height: 1; }
+    .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 15px 0; }
+    .profile-stat { padding: 10px 5px; border: 1px solid #dfe3e8; border-radius: 8px; text-align: center; }
+    .profile-stat span { display: block; color: #69727d; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+    .profile-stat strong { display: block; margin-top: 4px; font-size: 18px; }
+    .profile-events { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 27px; margin-top: 4px; }
+    .profile-event { display: inline-flex; align-items: center; gap: 3px; font-size: 17px; font-weight: 900; }
+    .profile-event .action { width: 19px; height: 19px; font-size: 10px; }
+    .profile-rating { background: #15803d; border-color: #15803d; color: #fff; }
+    .profile-rating span { color: rgba(255,255,255,.78); }
+    .profile-rating.rating-red { background: #dc2626; border-color: #dc2626; }
+    .profile-rating.rating-yellow { background: #f5c400; border-color: #f5c400; color: #111; }
+    .profile-rating.rating-yellow span { color: rgba(17,17,17,.72); }
+    .profile-rating.rating-light-green { background: #65a30d; border-color: #65a30d; }
+    .profile-rating.rating-dark-green { background: #15803d; border-color: #15803d; }
+    .profile-rating.rating-blue { background: #2563eb; border-color: #2563eb; }
+    .profile-list-title { margin: 15px 0 7px; font-size: 12px; text-transform: uppercase; }
+    .profile-list { margin: 0; padding: 0; list-style: none; border: 1px solid #dfe3e8; border-radius: 8px; overflow: hidden; }
+    .profile-list li { display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 8px 10px; border-bottom: 1px solid #edf0f3; font-weight: 700; }
+    .profile-list li:last-child { border-bottom: 0; }
+    .profile-mark { width: 20px; height: 20px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: #fff; font-weight: 900; }
+    .profile-plus { background: #08a045; } .profile-minus { background: #dc2626; }
+    body.dark .player-profile { background: #172033; border-color: #2c3a50; color: #e5e7eb; }
+    body.dark .profile-head, body.dark .profile-list li { border-color: #2c3a50; }
+    body.dark .profile-close, body.dark .profile-stat, body.dark .profile-list { background: #172033; border-color: #2c3a50; color: #e5e7eb; }
+    body.dark .profile-kicker, body.dark .profile-position, body.dark .profile-stat span { color: #a8b3c3; }
     @media (max-width: 860px) { .scoreboard, .layout, .bench, .lineups-header { grid-template-columns: 1fr; } .score { order: -1; } .pitch { min-height: 560px; } }
   </style>
 </head>
@@ -354,6 +392,60 @@
     }
     themeToggle.addEventListener("click", () => applyTheme(document.body.classList.contains("dark") ? "light" : "dark"));
     applyTheme(localStorage.getItem("flasstromaTheme") || "light");
+
+    /* Wszystkie dane profili edytujesz później tylko tutaj. */
+    const playerProfiles = {
+      Kreweda: { photo: "10203a2f-3b65-4df0-a5fb-15dbdc0024cf.jpg", position: "Napastnik", minutes: 90, topPerformances: { goals: 3, assists: 0 }, rating: "8.1", ratingClass: "rating-dark-green", pluses: ["3 gole", "3 wybicia", "4 przechwyty", "Celność podań: 95%", "Udane dryblingi: 1/1"], minuses: ["Błąd skutkujący golem"] },
+      "Luśken": { photo: "117 (1).jpg", position: "Bramkarz", minutes: 90, topPerformances: { goals: 0, assists: 2 }, rating: "4.5", ratingClass: "rating-red", pluses: ["2 asysty", "Celność podań: 85%", "2 obrony"], minuses: ["3 błędy skutkujące golem", "Zapobiegnięcie utracie bramki", "6 straconych bramek"] },
+      Vienna: { photo: "116 (2).jpg", position: "Napastnik", minutes: 90, topPerformances: { goals: 6, assists: 0 }, rating: "9.7", ratingClass: "rating-blue", pluses: ["6 goli", "3 przechwyty", "Celność podań: 100%", "Udane dryblingi: 5/5"], minuses: ["5 strat piłki", "Błąd skutkujący strzałem", "Gra jako ostatni obrońca"] },
+      Ola: { photo: "116 (1).jpg", position: "Bramkarz", minutes: 90, topPerformances: { goals: 0, assists: 4 }, rating: "4.5", ratingClass: "rating-red", pluses: ["4 asysty", "Celność podań: 89%"], minuses: ["3 wpuszczone bramki", "Zapobiegnięcie utracie gola", "Niecelny strzał"] }
+    };
+
+    const profileBackdrop = document.createElement("div");
+    profileBackdrop.className = "player-profile-backdrop";
+    profileBackdrop.innerHTML = `
+      <section class="player-profile" role="dialog" aria-modal="true" aria-label="Profil zawodnika">
+        <div class="profile-head"><img class="profile-photo" alt="" /><div><p class="profile-kicker">Profil zawodnika</p><h2 class="profile-name"></h2><p class="profile-position"></p></div><button class="profile-close" type="button" aria-label="Zamknij">×</button></div>
+        <div class="profile-stats"><div class="profile-stat"><span>Min.</span><strong data-field="minutes"></strong></div><div class="profile-stat"><span>Top występy</span><div class="profile-events" data-field="top"></div></div><div class="profile-stat profile-rating"><span>Rating</span><strong data-field="rating"></strong></div></div>
+        <h3 class="profile-list-title">Plusy</h3><ul class="profile-list" data-field="pluses"></ul>
+        <h3 class="profile-list-title">Minusy</h3><ul class="profile-list" data-field="minuses"></ul>
+      </section>`;
+    document.body.appendChild(profileBackdrop);
+
+    let lastProfileTrigger = null;
+    const profileList = (items, type) => items.map(item => `<li><span class="profile-mark profile-${type}">${type === "plus" ? "+" : "−"}</span>${item}</li>`).join("");
+    const openProfile = (name, trigger) => {
+      const data = playerProfiles[name];
+      if (!data) return;
+      lastProfileTrigger = trigger;
+      profileBackdrop.querySelector(".profile-photo").src = data.photo;
+      profileBackdrop.querySelector(".profile-photo").alt = name;
+      profileBackdrop.querySelector(".profile-name").textContent = name;
+      profileBackdrop.querySelector(".profile-position").textContent = data.position;
+      profileBackdrop.querySelector('[data-field="minutes"]').textContent = data.minutes;
+      profileBackdrop.querySelector('[data-field="top"]').innerHTML = [
+        data.topPerformances.goals ? `<span class="profile-event">${data.topPerformances.goals}<span class="action goal">G</span></span>` : "",
+        data.topPerformances.assists ? `<span class="profile-event">${data.topPerformances.assists}<span class="action sub-in">A</span></span>` : ""
+      ].join("");
+      profileBackdrop.querySelector('[data-field="rating"]').textContent = data.rating;
+      profileBackdrop.querySelector('[data-field="pluses"]').innerHTML = profileList(data.pluses, "plus");
+      profileBackdrop.querySelector('[data-field="minuses"]').innerHTML = profileList(data.minuses, "minus");
+      profileBackdrop.querySelector(".profile-rating").className = `profile-stat profile-rating ${data.ratingClass}`;
+      profileBackdrop.classList.add("open");
+      profileBackdrop.querySelector(".profile-close").focus();
+    };
+    const closeProfile = () => { profileBackdrop.classList.remove("open"); if (lastProfileTrigger) lastProfileTrigger.focus(); };
+    const activatePlayer = (element, name) => {
+      if (!playerProfiles[name]) return;
+      element.dataset.player = name; element.tabIndex = 0; element.setAttribute("role", "button"); element.setAttribute("aria-label", `Pokaż profil: ${name}`);
+      element.addEventListener("click", () => openProfile(name, element));
+      element.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openProfile(name, element); } });
+    };
+    document.querySelectorAll(".player").forEach(element => activatePlayer(element, element.querySelector(".name").textContent.replace("★", "").trim()));
+    document.querySelectorAll(".row").forEach(element => activatePlayer(element, element.querySelector("strong").textContent.trim()));
+    profileBackdrop.querySelector(".profile-close").addEventListener("click", closeProfile);
+    profileBackdrop.addEventListener("click", event => { if (event.target === profileBackdrop) closeProfile(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && profileBackdrop.classList.contains("open")) closeProfile(); });
   </script>
 </body>
 </html>
