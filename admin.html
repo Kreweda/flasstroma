@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -177,7 +179,7 @@
       grid-template-columns: 62px 95px 105px minmax(120px, 1fr) minmax(150px, 1.2fr) 78px 36px;
     }
     .player-grid {
-      grid-template-columns: 88px minmax(120px, 1.2fr) minmax(110px, 1fr) minmax(130px, 1.2fr) 62px 62px 72px 58px 58px 58px 58px 80px 58px 36px;
+      grid-template-columns: 88px minmax(120px, 1.2fr) minmax(110px, 1fr) minmax(130px, 1.2fr) 62px 62px 58px 72px 58px 58px 58px 58px 80px 58px minmax(180px, 1.4fr) minmax(180px, 1.4fr) 36px;
     }
     .builder-row {
       border: 1px solid #dfe3e8;
@@ -382,7 +384,7 @@
               <div class="builder-scroll">
                 <div class="builder">
                   <div class="builder-head player-grid">
-                    <span>Strona</span><span>Zawodnik</span><span>Pozycja</span><span>Zdjęcie</span><span>Lewo %</span><span>Góra %</span><span>Ocena</span><span>Gole</span><span>Asysty</span><span>ŻK</span><span>CK</span><span>Obrony</span><span>MVP</span><span></span>
+                    <span>Strona</span><span>Zawodnik</span><span>Pozycja</span><span>Zdjęcie</span><span>Lewo %</span><span>Góra %</span><span>Min.</span><span>Ocena</span><span>Gole</span><span>Asysty</span><span>ŻK</span><span>CK</span><span>Obrony</span><span>MVP</span><span>Plusy</span><span>Minusy</span><span></span>
                   </div>
                   <div id="playerRows" class="builder"></div>
                 </div>
@@ -391,7 +393,7 @@
                 <button id="addHomePlayerBtn" class="btn secondary" type="button">Dodaj gospodarza</button>
                 <button id="addAwayPlayerBtn" class="btn secondary" type="button">Dodaj gościa</button>
               </div>
-              <p class="hint">Lewo i Góra ustawiają zawodnika na boisku. Przykład: 34 / 77 to dół po lewej, 66 / 23 to góra po prawej.</p>
+              <p class="hint">Kliknięcie zawodnika w gotowym meczu otworzy jego panel. W polach Plusy i Minusy oddziel kolejne pozycje średnikiem, np. „3 gole; celność podań 95%”.</p>
             </div>
 
             <h2 class="panel-title">Statystyki</h2>
@@ -515,6 +517,7 @@ Celność podań;84%;88%</textarea>
         <input class="player-photo" type="text" value="${escapeHtml(data.photo || "")}" placeholder="np. 116.jpg" />
         <input class="player-left" type="number" min="5" max="95" value="${escapeHtml(data.left || "")}" placeholder="34" />
         <input class="player-top" type="number" min="5" max="95" value="${escapeHtml(data.top || "")}" placeholder="77" />
+        <input class="player-minutes" type="number" min="0" max="180" value="${escapeHtml(data.minutes ?? 90)}" placeholder="90" />
         <input class="player-rating" type="number" min="1" max="10" step="0.1" value="${escapeHtml(data.rating || "")}" placeholder="7.5" />
         <input class="player-goals" type="number" min="0" value="${escapeHtml(data.goals || 0)}" />
         <input class="player-assists" type="number" min="0" value="${escapeHtml(data.assists || 0)}" />
@@ -525,6 +528,8 @@ Celność podań;84%;88%</textarea>
           <option value="no"${data.mvp ? "" : " selected"}>Nie</option>
           <option value="yes"${data.mvp ? " selected" : ""}>Tak</option>
         </select>
+        <input class="player-pluses" type="text" value="${escapeHtml(data.pluses || "")}" placeholder="np. 2 gole; 3 przechwyty" />
+        <input class="player-minuses" type="text" value="${escapeHtml(data.minuses || "")}" placeholder="np. strata piłki; niecelny strzał" />
         <button class="remove-row" type="button">×</button>
       `;
       row.querySelector(".remove-row").addEventListener("click", () => row.remove());
@@ -550,13 +555,16 @@ Celność podań;84%;88%</textarea>
         photo: row.querySelector(".player-photo").value.trim(),
         left: row.querySelector(".player-left").value.trim(),
         top: row.querySelector(".player-top").value.trim(),
+        minutes: Number(row.querySelector(".player-minutes").value || 0),
         rating: row.querySelector(".player-rating").value.trim(),
         goals: Number(row.querySelector(".player-goals").value || 0),
         assists: Number(row.querySelector(".player-assists").value || 0),
         yellow: Number(row.querySelector(".player-yellow").value || 0),
         red: Number(row.querySelector(".player-red").value || 0),
         saves: row.querySelector(".player-saves").value.trim(),
-        mvp: row.querySelector(".player-mvp").value === "yes"
+        mvp: row.querySelector(".player-mvp").value === "yes",
+        pluses: row.querySelector(".player-pluses").value.split(";").map((item) => item.trim()).filter(Boolean),
+        minuses: row.querySelector(".player-minuses").value.split(";").map((item) => item.trim()).filter(Boolean)
       })).filter((item) => item.name);
     }
 
@@ -657,7 +665,7 @@ Celność podań;84%;88%</textarea>
         const left = player.left || (player.side === "home" ? 34 : 66);
         const top = player.top || (player.side === "home" ? 72 : 28);
         return `
-          <div class="player" style="left:${escapeHtml(left)}%;top:${escapeHtml(top)}%;">
+          <div class="player" data-player="${escapeHtml(player.name)}" style="left:${escapeHtml(left)}%;top:${escapeHtml(top)}%;">
             ${playerImage(player, "player-photo")}
             <span class="name">${escapeHtml(player.name)} ${player.mvp ? '<span class="mvp-star">★</span>' : ""}</span>
             <span class="player-actions">${playerActions(player)}</span>
@@ -668,7 +676,7 @@ Celność podań;84%;88%</textarea>
 
       function playerRows(rows) {
         return rows.map((player) => `
-          <div class="row">
+          <div class="row" data-player="${escapeHtml(player.name)}">
             ${playerImage(player, "row-photo")}
             <div>
               <strong>${escapeHtml(player.name)}</strong>
@@ -679,6 +687,17 @@ Celność podań;84%;88%</textarea>
         `).join("");
       }
 
+      const profiles = Object.fromEntries(players.map((player) => [player.name, {
+        photo: player.photo,
+        position: player.position,
+        minutes: player.minutes,
+        goals: player.goals,
+        assists: player.assists,
+        rating: player.rating,
+        ratingClass: ratingClass(player.rating),
+        pluses: player.pluses,
+        minuses: player.minuses
+      }]));
       const statsHtml = stats.map(([name, homeValue, awayValue]) => `
         <div class="stat">
           <span>${escapeHtml(homeValue)}</span>
@@ -790,6 +809,21 @@ Celność podań;84%;88%</textarea>
     body.dark .card, body.dark .list, body.dark .row, body.dark .back-button { background: #172033; border-color: #2c3a50; color: #e5e7eb; }
     body.dark .panel-title, body.dark .match-state, body.dark .period, body.dark .list-head { background: #111827; border-color: #2c3a50; color: #e5e7eb; }
     body.dark .team-meta, body.dark .score-sub, body.dark .event-time, body.dark .event-note, body.dark .score-tag, body.dark .row span, body.dark .info-row span, body.dark .note { color: #a8b3c3; }
+    .player, .row { cursor: pointer; }
+    .player:focus-visible, .row:focus-visible, .profile-close:focus-visible { outline: 3px solid #ff0046; outline-offset: 3px; }
+    .player-profile-backdrop { display: none; position: fixed; inset: 0; z-index: 30; padding: 20px; place-items: center; background: rgba(7,17,29,.64); }
+    .player-profile-backdrop.open { display: grid; }
+    .player-profile { width: min(100%, 480px); max-height: min(700px, calc(100vh - 40px)); overflow: auto; padding: 18px; border: 1px solid #dfe3e8; border-radius: 12px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.34); }
+    .profile-head { display: flex; align-items: center; gap: 13px; padding-bottom: 15px; border-bottom: 1px solid #edf0f3; }
+    .profile-photo { width: 68px; height: 68px; border: 3px solid #edf0f3; border-radius: 50%; object-fit: cover; background: #111827; }
+    .profile-kicker { margin: 0 0 3px; color: #69727d; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+    .profile-name { margin: 0; font-size: 21px; }.profile-position { margin: 4px 0 0; color: #69727d; font-weight: 700; }
+    .profile-close { width: 34px; height: 34px; margin-left: auto; border: 1px solid #dfe3e8; border-radius: 50%; background: #fff; color: #38424f; cursor: pointer; font-size: 22px; line-height: 1; }
+    .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 15px 0; }.profile-stat { padding: 10px 5px; border: 1px solid #dfe3e8; border-radius: 8px; text-align: center; }.profile-stat span { display: block; color: #69727d; font-size: 10px; font-weight: 900; text-transform: uppercase; }.profile-stat strong { display: block; margin-top: 4px; font-size: 18px; }
+    .profile-events { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 27px; margin-top: 4px; }.profile-event { display: inline-flex; align-items: center; gap: 3px; font-size: 17px; font-weight: 900; }.profile-event .action { width: 19px; height: 19px; font-size: 10px; }
+    .profile-rating { background: #15803d; border-color: #15803d; color: #fff; }.profile-rating span { color: rgba(255,255,255,.78); }.profile-rating.rating-red { background: #dc2626; border-color: #dc2626; }.profile-rating.rating-yellow { background: #f5c400; border-color: #f5c400; color: #111; }.profile-rating.rating-yellow span { color: rgba(17,17,17,.72); }.profile-rating.rating-light-green { background: #65a30d; border-color: #65a30d; }.profile-rating.rating-dark-green { background: #15803d; border-color: #15803d; }.profile-rating.rating-blue { background: #2563eb; border-color: #2563eb; }
+    .profile-list-title { margin: 15px 0 7px; font-size: 12px; text-transform: uppercase; }.profile-list { margin: 0; padding: 0; list-style: none; border: 1px solid #dfe3e8; border-radius: 8px; overflow: hidden; }.profile-list li { display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 8px 10px; border-bottom: 1px solid #edf0f3; font-weight: 700; }.profile-list li:last-child { border-bottom: 0; }.profile-mark { width: 20px; height: 20px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: #fff; font-weight: 900; }.profile-plus { background: #08a045; }.profile-minus { background: #dc2626; }
+    body.dark .player-profile { background: #172033; border-color: #2c3a50; color: #e5e7eb; } body.dark .profile-head, body.dark .profile-list li { border-color: #2c3a50; } body.dark .profile-close, body.dark .profile-stat, body.dark .profile-list { background: #172033; border-color: #2c3a50; color: #e5e7eb; } body.dark .profile-kicker, body.dark .profile-position, body.dark .profile-stat span { color: #a8b3c3; }
     @media (max-width: 860px) { .scoreboard, .layout, .bench, .lineups-header { grid-template-columns: 1fr; } .score { order: -1; } .pitch { min-height: 560px; } }
   </style>
 </head>
@@ -838,6 +872,7 @@ Celność podań;84%;88%</textarea>
     </div>
   </div>
   <script>
+    const playerProfiles = ${JSON.stringify(profiles)};
     const tabs = document.querySelectorAll(".tab");
     const tabViews = document.querySelectorAll(".tab-view");
     tabs.forEach((tab) => {
@@ -855,6 +890,33 @@ Celność podań;84%;88%</textarea>
     }
     themeToggle.addEventListener("click", () => applyTheme(document.body.classList.contains("dark") ? "light" : "dark"));
     applyTheme(localStorage.getItem("flasstromaTheme") || "light");
+
+    const profileBackdrop = document.createElement("div");
+    profileBackdrop.className = "player-profile-backdrop";
+    profileBackdrop.innerHTML = '<section class="player-profile" role="dialog" aria-modal="true" aria-label="Profil zawodnika"><div class="profile-head"><img class="profile-photo" alt="" /><div><p class="profile-kicker">Profil zawodnika</p><h2 class="profile-name"></h2><p class="profile-position"></p></div><button class="profile-close" type="button" aria-label="Zamknij">×</button></div><div class="profile-stats"><div class="profile-stat"><span>Min.</span><strong data-field="minutes"></strong></div><div class="profile-stat"><span>Top występy</span><div class="profile-events" data-field="top"></div></div><div class="profile-stat profile-rating"><span>Rating</span><strong data-field="rating"></strong></div></div><h3 class="profile-list-title">Plusy</h3><ul class="profile-list" data-field="pluses"></ul><h3 class="profile-list-title">Minusy</h3><ul class="profile-list" data-field="minuses"></ul></section>';
+    document.body.appendChild(profileBackdrop);
+    let lastProfileTrigger = null;
+    const profileList = (items, type) => (items.length ? items : ["Brak"]).map(item => '<li><span class="profile-mark profile-' + type + '">' + (type === "plus" ? "+" : "−") + '</span>' + item + '</li>').join("");
+    const openProfile = (name, trigger) => {
+      const data = playerProfiles[name]; if (!data) return;
+      lastProfileTrigger = trigger;
+      profileBackdrop.querySelector(".profile-photo").src = data.photo || "";
+      profileBackdrop.querySelector(".profile-photo").alt = name;
+      profileBackdrop.querySelector(".profile-name").textContent = name;
+      profileBackdrop.querySelector(".profile-position").textContent = data.position;
+      profileBackdrop.querySelector('[data-field="minutes"]').textContent = data.minutes;
+      profileBackdrop.querySelector('[data-field="top"]').innerHTML = [data.goals ? '<span class="profile-event">' + data.goals + '<span class="action goal">G</span></span>' : "", data.assists ? '<span class="profile-event">' + data.assists + '<span class="action sub-in">A</span></span>' : ""].join("") || "—";
+      profileBackdrop.querySelector('[data-field="rating"]').textContent = data.rating || "-";
+      profileBackdrop.querySelector('[data-field="pluses"]').innerHTML = profileList(data.pluses, "plus");
+      profileBackdrop.querySelector('[data-field="minuses"]').innerHTML = profileList(data.minuses, "minus");
+      profileBackdrop.querySelector(".profile-rating").className = "profile-stat profile-rating " + data.ratingClass;
+      profileBackdrop.classList.add("open"); profileBackdrop.querySelector(".profile-close").focus();
+    };
+    const closeProfile = () => { profileBackdrop.classList.remove("open"); if (lastProfileTrigger) lastProfileTrigger.focus(); };
+    document.querySelectorAll("[data-player]").forEach(element => { const name = element.dataset.player; element.tabIndex = 0; element.setAttribute("role", "button"); element.setAttribute("aria-label", "Pokaż profil: " + name); element.addEventListener("click", () => openProfile(name, element)); element.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openProfile(name, element); } }); });
+    profileBackdrop.querySelector(".profile-close").addEventListener("click", closeProfile);
+    profileBackdrop.addEventListener("click", event => { if (event.target === profileBackdrop) closeProfile(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && profileBackdrop.classList.contains("open")) closeProfile(); });
   <\/script>
 </body>
 </html>`;
