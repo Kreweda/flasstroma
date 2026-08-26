@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -406,6 +407,166 @@ body.dark .tag {
       margin: 0;
     }
 
+    .bracket-wrap {
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .bracket {
+      min-width: 1040px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 42px;
+      align-items: center;
+    }
+
+    .bracket-round {
+      display: grid;
+      gap: 18px;
+      position: relative;
+    }
+
+    .bracket-round.quarterfinals {
+      gap: 18px;
+    }
+
+    .bracket-round.semifinals {
+      gap: 108px;
+    }
+
+    .round-title {
+      margin: 0 0 8px;
+      color: #38424f;
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .bracket-match {
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    .bracket-match h4 {
+      margin: 0;
+      padding: 8px 10px;
+      background: #f6f7f9;
+      border-bottom: 1px solid #dfe3e8;
+      color: #69727d;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .bracket-team {
+      display: grid;
+      grid-template-columns: 1fr 44px;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 7px 10px;
+      border-bottom: 1px solid #edf0f3;
+    }
+
+    .bracket-team:last-child {
+      border-bottom: 0;
+    }
+
+    .bracket-team.winner strong {
+      color: #15803d;
+      font-weight: 900;
+    }
+
+    .score {
+      min-width: 30px;
+      color: #69727d;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .bracket-match::after,
+    .bracket-match::before {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .bracket-match {
+      position: relative;
+    }
+
+    .bracket-round.quarterfinals .bracket-match::after {
+      top: 50%;
+      right: -22px;
+      width: 22px;
+      border-top: 2px solid #cbd5e1;
+    }
+
+    .bracket-round.quarterfinals .bracket-match:nth-of-type(2)::before,
+    .bracket-round.quarterfinals .bracket-match:nth-of-type(4)::before {
+      top: -9px;
+      right: -22px;
+      height: calc(100% + 18px);
+      border-right: 2px solid #cbd5e1;
+    }
+
+    .bracket-round.semifinals .bracket-match::before,
+    .bracket-round.final .bracket-match::before {
+      top: 50%;
+      left: -22px;
+      width: 22px;
+      border-top: 2px solid #cbd5e1;
+    }
+
+    .bracket-round.semifinals .bracket-match::after {
+      top: 50%;
+      right: -22px;
+      width: 22px;
+      border-top: 2px solid #cbd5e1;
+    }
+
+    .bracket-round.semifinals .bracket-match:nth-of-type(2)::after {
+      top: -54px;
+      height: 108px;
+      border-right: 2px solid #cbd5e1;
+    }
+
+    body.dark .score {
+      color: #a8b3c3;
+    }
+
+    body.dark .round-title,
+    body.dark .bracket-team strong {
+      color: #e5e7eb;
+    }
+
+    body.dark .bracket-match {
+      background: #172033;
+      border-color: #334155;
+    }
+
+    body.dark .bracket-match h4 {
+      background: #111827;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+
+    body.dark .bracket-team {
+      border-color: #334155;
+    }
+
+    body.dark .bracket-team.winner strong {
+      color: #86efac;
+    }
+
+    body.dark .bracket-match::after,
+    body.dark .bracket-match::before {
+      border-color: #475569;
+    }
+
     @media (max-width: 920px) {
       .competition-grid,
       .leaders-grid {
@@ -428,6 +589,10 @@ body.dark .tag {
       .competition-grid,
       .leaders-grid {
         grid-template-columns: 1fr;
+      }
+
+      .bracket {
+        min-width: 820px;
       }
     }
   </style>
@@ -564,6 +729,29 @@ body.dark .tag {
           cleanSheets: [],
           cards: []
         }
+      },
+      {
+        id: "superpuchar-grahamki",
+        name: "Superpuchar Grahamki",
+        format: "Faza pucharowa",
+        description: "Pusta drabinka fazy pucharowej do uzupełnienia wyników w kodzie.",
+        bracket: {
+          quarterfinals: [
+            { playerA: "-", playerB: "Pero", scoreA: "", scoreB: "", winner: "Pero" },
+            { playerA: "-", playerB: "Luśken", scoreA: "", scoreB: "", winner: "Luśken" },
+            { playerA: "-", playerB: "Vienna", scoreA: "", scoreB: "", winner: "Vienna" },
+            { playerA: "Kreweda", playerB: "Ola", scoreA: "", scoreB: "", winner: "" }
+          ],
+          semifinalOne: { playerA: "Pero", playerB: "Luśken", scoreA: "", scoreB: "", winner: "" },
+          semifinalTwo: { playerA: "Vienna", playerB: "Zwycięzca ćwierćfinału", scoreA: "", scoreB: "", winner: "" },
+          final: { playerA: "Zwycięzca półfinału I", playerB: "Zwycięzca półfinału II", scoreA: "", scoreB: "", winner: "" }
+        },
+        leaders: {
+          scorers: [],
+          assists: [],
+          cleanSheets: [],
+          cards: []
+        }
       }
     ];
 
@@ -658,6 +846,48 @@ body.dark .tag {
       `;
     }
 
+    function bracketMatch(title, match, matchId) {
+      const renderPlayer = (name, score, side) => `
+        <div class="bracket-team ${match.winner === name && name ? "winner" : ""}">
+          <strong>${name || "________________"}</strong>
+          <span class="score">${score || "_"}</span>
+        </div>
+      `;
+
+      return `
+        <article class="bracket-match">
+          <h4>${title}</h4>
+          ${renderPlayer(match.playerA, match.scoreA, "A")}
+          ${renderPlayer(match.playerB, match.scoreB, "B")}
+        </article>
+      `;
+    }
+
+    function renderBracket(competition) {
+      const bracket = competition.bracket;
+
+      return `
+        <h3 class="panel-title">Drabinka turniejowa</h3>
+        <div class="panel-body bracket-wrap">
+          <div class="bracket">
+            <div class="bracket-round quarterfinals">
+              <h3 class="round-title">Ćwierćfinał</h3>
+              ${bracket.quarterfinals.map((match, index) => bracketMatch(`Mecz ${index + 1}`, match, `quarterfinal-${index}`)).join("")}
+            </div>
+            <div class="bracket-round semifinals">
+              <h3 class="round-title">Półfinały</h3>
+              ${bracketMatch("Półfinał I", bracket.semifinalOne, "semifinalOne")}
+              ${bracketMatch("Półfinał II", bracket.semifinalTwo, "semifinalTwo")}
+            </div>
+            <div class="bracket-round">
+              <h3 class="round-title">Finał</h3>
+              ${bracketMatch("Mecz finałowy", bracket.final, "final")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderCompetition(competitionId) {
       const competition = competitions.find((item) => item.id === competitionId);
 
@@ -668,17 +898,12 @@ body.dark .tag {
       });
 
       competitionPanel.classList.add("active");
-      competitionPanel.innerHTML = `
+      competitionPanel.innerHTML = competition.bracket ? `
         <div class="competition-head">
           <h2>${competition.name}</h2>
           <p>${competition.description}</p>
         </div>
-
-        <h3 class="panel-title">Tabela</h3>
-        <div class="panel-body">
-          ${competition.divisions.map(renderTable).join("")}
-        </div>
-
+        ${renderBracket(competition)}
         <h3 class="panel-title">Klasyfikacje</h3>
         <div class="panel-body">
           <div class="leaders-grid">
@@ -688,7 +913,27 @@ body.dark .tag {
             ${renderLeader("Kartki", competition.leaders.cards, "")}
           </div>
         </div>
-      `;
+      ` : `
+          <div class="competition-head">
+            <h2>${competition.name}</h2>
+            <p>${competition.description}</p>
+          </div>
+
+          <h3 class="panel-title">Tabela</h3>
+          <div class="panel-body">
+            ${competition.divisions.map(renderTable).join("")}
+          </div>
+
+          <h3 class="panel-title">Klasyfikacje</h3>
+          <div class="panel-body">
+            <div class="leaders-grid">
+              ${renderLeader("Strzelcy", competition.leaders.scorers, " g")}
+              ${renderLeader("Asystenci", competition.leaders.assists, " a")}
+              ${renderLeader("Czyste konta", competition.leaders.cleanSheets, "")}
+              ${renderLeader("Kartki", competition.leaders.cards, "")}
+            </div>
+          </div>
+        `;
 
       competitionPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
