@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -189,6 +190,65 @@ body.dark .tag {
       margin: 4px 0 0;
       color: #69727d;
       font-weight: 700;
+    }
+
+    .season-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #f6f7f9;
+    }
+
+    .season-button {
+      border: 1px solid #dfe3e8;
+      border-radius: 999px;
+      padding: 9px 15px;
+      background: #fff;
+      color: #38424f;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .season-button.active {
+      background: #ff0046;
+      border-color: #ff0046;
+      color: #fff;
+    }
+
+    .season-panel {
+      display: none;
+    }
+
+    .season-panel.active {
+      display: grid;
+      gap: 12px;
+    }
+
+    .season-empty {
+      margin: 0;
+      padding: 34px 16px;
+      color: #69727d;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    body.dark .season-tabs {
+      background: #111827;
+      border-color: #2c3a50;
+    }
+
+    body.dark .season-button {
+      background: #172033;
+      border-color: #2c3a50;
+      color: #e5e7eb;
+    }
+
+    body.dark .season-button.active {
+      background: #ff0046;
+      border-color: #ff0046;
+      color: #fff;
     }
 
     .players-grid {
@@ -446,6 +506,12 @@ body.dark .tag {
       <p>Kliknij zawodnika, zeby zobaczyc profil i statystyki.</p>
     </section>
 
+    <div class="season-tabs" aria-label="Wybór sezonu">
+      <button class="season-button" type="button" data-season="season-2026">Sezon 2026</button>
+      <button class="season-button active" type="button" data-season="season-2026-2027">Sezon 2026/2027</button>
+    </div>
+
+    <div id="season-2026" class="season-panel">
     <section class="card">
       <h2 class="panel-title">Lista zawodnikow</h2>
       <div class="panel-body">
@@ -454,6 +520,18 @@ body.dark .tag {
     </section>
 
     <section id="playerProfile" class="card profile"></section>
+    </div>
+
+    <div id="season-2026-2027" class="season-panel active">
+      <section class="card">
+        <h2 class="panel-title">Lista zawodników — sezon 2026/2027</h2>
+        <div class="panel-body">
+          <div id="playersGrid2027" class="players-grid"></div>
+        </div>
+      </section>
+
+      <section id="playerProfile2027" class="card profile"></section>
+    </div>
   </main>
 
   <script>
@@ -598,8 +676,96 @@ body.dark .tag {
       }
     ];
 
+    // SEZON 2026/2027 — tę listę edytujesz ręcznie, niezależnie od sezonu 2026.
+    // Zmieniaj liczby przy appearances, goals, assists itd. po rozegranych meczach.
+    const players2026_2027 = [
+      {
+        id: "lusken", name: "Luśken", photo: "l.jpg", age: "16 lat", position: "Bramkarz", value: "20 mln", club: "Stromianka FC", averageRating: 7.0,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 1, goals: 1, assists: 2, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: 7.0 },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Superpuchar Grahamki", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "vienna", name: "Vienna", photo: "116 (2).jpg", age: "17 lat", position: "Środkowy Pomocnik/ Środkowy Pomocnik Defensywny/ Środkowy Obrońca", value: "80 mln", club: "Jugosławianka", averageRating: 8.9,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 1, goals: 1, assists: 3, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: 8.9 },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Reprezentacja ul.Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Superpuchar Grahamki", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "koteu", name: "Koteu", photo: "116.jpg", age: "20 lat", position: "Napastnik/ Środkowy Pomocnik Ofensywny", value: "100mln", club: "FS Lammers", averageRating: null,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "kreweda", name: "Kreweda", photo: "10203a2f-3b65-4df0-a5fb-15dbdc0024cf.jpg", age: "19 lat", position: "Środkowy Obrońca/ Środkowy Pomocnik Defensywny", value: "49mln", club: "Jugosławianka FC", averageRating: 8.0,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 1, goals: 2, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: 8.0 },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Reprezentacja ul.Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Superpuchar Grahamki", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "serduszkowata", name: "Serduszkowata", photo: "116 (1).jpg", age: "13 lat", position: "Środkowy Pomocnik Ofensywny/ Napastnik", value: "20 mln", club: "FS Lammers", averageRating: 8.9,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 1, goals: 0, assists: 1, yellowCards: 1, redCards: 0, cleanSheets: 0, rating: 6.0 },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Superpuchar Grahamki", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "pero", name: "Pero", photo: "117.jpg", age: "15 lat", position: "Prawy Skrzydłowy/ Środkowy Pomocnik Ofensywny", value: "75 mln", club: "Stromianka", averageRating: 8.9,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 1, goals: 4, assists: 0, yellowCards: 1, redCards: 0, cleanSheets: 0, rating: 8.9 },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Reprezentacja ul.Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Superpuchar Grahamki", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "uwu", name: "UwU", photo: "un.jpg", age: "14 lat", position: "Środkowy Pomocnik", value: "1,0 mln", club: "Stromianka", averageRating: null,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      },
+      {
+        id: "luki", name: "Luki", photo: "92a1363d-8754-43d0-b39c-ead62b8b9378.jpg", age: "19 lat", position: "Prawo skrzydłowy", value: "40,0 mln", club: "KTE x SER", averageRating: null,
+        stats: [
+          { competition: "Liga Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Mecze Towarzyskie", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Liga Oguruw", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Puchar Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null },
+          { competition: "Reprezentacja ul.Stromej", appearances: 0, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0, rating: null }
+        ]
+      }
+    ];
+
     const playersGrid = document.getElementById("playersGrid");
     const playerProfile = document.getElementById("playerProfile");
+    const playersGrid2027 = document.getElementById("playersGrid2027");
+    const playerProfile2027 = document.getElementById("playerProfile2027");
 
     function ratingClass(rating) {
       if (rating === null) return "rating-empty";
@@ -631,8 +797,8 @@ body.dark .tag {
       return `<span class="${initialsClass}">${initials(player.name)}</span>`;
     }
 
-    function renderPlayers() {
-      playersGrid.innerHTML = players.map((player) => `
+    function renderPlayers(playersList, grid) {
+      grid.innerHTML = playersList.map((player) => `
         <button class="player-card" type="button" data-player="${player.id}">
           ${playerImage(player, "player-photo")}
           <strong>${player.name}</strong>
@@ -642,17 +808,17 @@ body.dark .tag {
       `).join("");
     }
 
-    function renderProfile(playerId) {
-      const player = players.find((item) => item.id === playerId);
+    function renderProfile(playersList, profileElement, grid, playerId) {
+      const player = playersList.find((item) => item.id === playerId);
 
       if (!player) return;
 
-      document.querySelectorAll(".player-card").forEach((card) => {
+      grid.querySelectorAll(".player-card").forEach((card) => {
         card.classList.toggle("active", card.dataset.player === playerId);
       });
 
-      playerProfile.classList.add("active");
-      playerProfile.innerHTML = `
+      profileElement.classList.add("active");
+      profileElement.innerHTML = `
         <div class="profile-top">
           ${playerImage(player, "profile-photo")}
           <div>
@@ -711,18 +877,33 @@ body.dark .tag {
         </div>
       `;
 
-      playerProfile.scrollIntoView({ behavior: "smooth", block: "start" });
+      profileElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    playersGrid.addEventListener("click", (event) => {
-      const card = event.target.closest(".player-card");
+    function enablePlayerCards(playersList, profileElement, grid) {
+      grid.addEventListener("click", (event) => {
+        const card = event.target.closest(".player-card");
 
-      if (!card) return;
+        if (!card) return;
 
-      renderProfile(card.dataset.player);
+        renderProfile(playersList, profileElement, grid, card.dataset.player);
+      });
+    }
+
+    document.querySelectorAll(".season-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".season-button, .season-panel").forEach((item) => {
+          item.classList.remove("active");
+        });
+        button.classList.add("active");
+        document.getElementById(button.dataset.season).classList.add("active");
+      });
     });
 
-    renderPlayers();
+    renderPlayers(players, playersGrid);
+    renderPlayers(players2026_2027, playersGrid2027);
+    enablePlayerCards(players, playerProfile, playersGrid);
+    enablePlayerCards(players2026_2027, playerProfile2027, playersGrid2027);
   </script>
   <script>
   const themeToggle = document.getElementById("themeToggle");
@@ -742,4 +923,3 @@ body.dark .tag {
 </script>
 </body>
 </html>
-
