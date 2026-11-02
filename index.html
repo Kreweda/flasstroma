@@ -1,133 +1,165 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0f172a">
-  <title>FlashStroma — Wyniki</title>
-  <style>
-    * { box-sizing: border-box; }
-    :root { --bg:#eceff3; --card:#fff; --text:#111827; --muted:#69727d; --line:#dfe3e8; --soft:#f6f7f9; --accent:#ff0046; }
-    body.dark { --bg:#0f172a; --card:#172033; --text:#e5e7eb; --muted:#a8b3c3; --line:#2c3a50; --soft:#111827; }
-    body { margin:0; background:var(--bg); color:var(--text); font:14px Arial,Helvetica,sans-serif; }
-    .topbar { position:sticky; top:0; z-index:10; color:#fff; background:#07111d; box-shadow:0 2px 12px #0004; }
-    .topbar-inner { width:min(1180px,calc(100% - 24px)); min-height:58px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:18px; }
-    .logo { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; }
-    .logo-mark { width:32px; height:32px; border-radius:50%; background:conic-gradient(#ff0046,#ff6b8a,#ff0046); box-shadow:inset 0 0 0 5px #fff3; }
-    .nav { display:flex; align-items:center; gap:4px; overflow-x:auto; white-space:nowrap; }
-    .nav a { display:block; padding:20px 11px 17px; border-bottom:3px solid transparent; color:#c5ced8; text-decoration:none; font-size:13px; font-weight:700; }
-    .nav a.active { color:#fff; border-color:var(--accent); }
-    .theme-toggle { min-width:42px; height:34px; margin-left:8px; border:1px solid #fff4; border-radius:999px; color:#fff; background:#fff1; cursor:pointer; font-weight:900; }
-    .page { width:min(1180px,calc(100% - 24px)); display:grid; gap:12px; margin:14px auto 30px; }
-    .card { overflow:hidden; border:1px solid var(--line); border-radius:8px; background:var(--card); box-shadow:0 8px 26px #0f172a14; }
-    .home-hero { padding:18px; color:#fff; background:linear-gradient(135deg,#07111d,#243244); }
-    .home-hero h1 { margin:0; font-size:28px; } .home-hero p { margin:7px 0 0; color:#cbd5e1; font-weight:700; }
-    .league { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--muted); font-size:12px; font-weight:900; text-transform:uppercase; }
-    .home-title { margin:0; padding:14px 12px; border-bottom:1px solid var(--line); background:var(--soft); font-size:13px; font-weight:900; text-transform:uppercase; }
-    .season-tabs { display:flex; gap:8px; padding:12px; border-bottom:1px solid var(--line); background:var(--soft); }
-    .season-button { padding:9px 15px; border:1px solid var(--line); border-radius:999px; color:var(--text); background:var(--card); cursor:pointer; font:inherit; font-weight:900; }
-    .season-button.active { border-color:var(--accent); color:#fff; background:var(--accent); }
-    .season-panel { display:none; } .season-panel.active { display:block; }
-    .match-board { display:grid; gap:10px; padding:12px; }
-    .match-link { display:grid; grid-template-columns:74px 1fr auto; gap:12px; align-items:center; min-height:72px; padding:12px; border:1px solid var(--line); border-radius:8px; color:var(--text); background:var(--card); text-decoration:none; transition:.16s ease; }
-    .match-link:hover { transform:translateY(-1px); border-color:var(--accent); box-shadow:0 8px 22px #0f172a1a; }
-    .match-link.featured { border-color:#ff004652; background:linear-gradient(90deg,var(--card),#fff5f8); }
-    body.dark .match-link.featured { background:linear-gradient(90deg,#172033,#211827); }
-    .match-time,.match-mini-meta { color:var(--muted); font-size:12px; font-weight:800; }
-    .match-teams { display:grid; gap:6px; font-weight:800; }
-    .match-mini-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .match-pill { padding:4px 8px; border-radius:999px; color:#d8003d; background:#ffe5ec; font-size:11px; font-weight:900; text-transform:uppercase; }
-    body.dark .match-pill { color:#ff7aa0; background:#3b1020; }
-    .match-team { display:flex; justify-content:space-between; gap:10px; } .match-team.winner { font-weight:900; }
-    .match-score { min-width:34px; text-align:right; font-weight:900; }
-    .match-status { color:#d8003d; font-size:12px; font-weight:900; text-transform:uppercase; }
-    .season-empty { padding:34px 16px; margin:0; color:var(--muted); text-align:center; font-weight:700; }
-    .install { justify-self:start; padding:10px 20px; border:0; border-radius:7px; color:#fff; background:#07111d; cursor:pointer; font-size:16px; }
-    @media (max-width:860px) { .topbar-inner { flex-direction:column; align-items:stretch; gap:0; padding-top:10px; } }
-    @media (max-width:560px) { .page { width:calc(100% - 14px); } .match-link { grid-template-columns:54px 1fr; } .match-status { grid-column:1/-1; } .league { align-items:flex-start; flex-direction:column; } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#001e28">
+<title>FlashStroma — Wyniki</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#f2f2f2;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--soft:#f6f7f9;--accent:#ff0046}
+body.dark{--bg:#0b1419;--card:#12202a;--text:#e8eef2;--muted:#8a99a4;--line:#1f303b;--soft:#182a35}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,Helvetica,sans-serif}
+.topbar{position:sticky;top:0;z-index:10;background:#001e28;color:#fff}
+.in{width:min(900px,calc(100% - 16px));margin:auto}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+.logo{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:900}
+.mark{width:26px;height:26px;border-radius:50%;background:conic-gradient(#ff0046,#ff6b8a,#ff0046)}
+.theme{border:1px solid #fff4;border-radius:99px;color:#fff;background:#fff1;height:30px;min-width:38px;cursor:pointer}
+.nav{display:flex;overflow-x:auto;white-space:nowrap}
+.nav a{padding:10px 11px;border-bottom:3px solid transparent;color:#9fb3bf;text-decoration:none;font-size:13px;font-weight:700}
+.nav a.active{color:#fff;border-color:var(--accent)}
+.page{width:min(900px,calc(100% - 16px));margin:10px auto 30px}
+.chips{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:99px;padding:7px 13px;cursor:pointer;white-space:nowrap;font:inherit;font-weight:700}
+.chips button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sub{margin-top:-4px}.sub button{font-size:12px;padding:5px 11px}
+.lg{background:var(--card);border-radius:6px;margin-bottom:10px;overflow:hidden}
+.lg h3{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:var(--soft);display:flex;justify-content:space-between;text-transform:uppercase}
+.m{display:grid;grid-template-columns:46px 1fr 40px 28px;gap:6px;align-items:center;padding:9px 12px;border-top:1px solid var(--line);color:var(--text);text-decoration:none}
+.m:hover{background:var(--soft)}
+.t{color:var(--muted);font-size:12px}.fin{font-size:10px;color:var(--accent);font-weight:700}
+.tm div{padding:1px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm .w,.sc .w{font-weight:800}
+.sc{text-align:center;font-weight:700}.sc div{padding:1px 0}
+.st{background:none;border:0;color:var(--muted);font-size:19px;cursor:pointer;padding:0}.st.on{color:#f5b301}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;text-align:center;border-top:1px solid var(--line)}
+th:nth-child(2),td:nth-child(2){text-align:left}
+.sel{display:flex;gap:8px;padding:12px;flex-wrap:wrap}
+.sel select{flex:1;min-width:140px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--text);font:inherit}
+.install{margin-top:6px;padding:10px 18px;border:0;border-radius:7px;color:#fff;background:#001e28;cursor:pointer;font-size:15px}
+</style>
 </head>
 <body>
-  <header class="topbar"><div class="topbar-inner">
-    <div class="logo"><span class="logo-mark"></span><span>Flashscore</span></div>
-    <nav class="nav">
-      <a class="active" href="index.html">Wyniki</a> <a class="active" href="wiadomosci.html">Wiadomości</a><a href="kluby.html">Drużyny</a><a href="wyniki.html">Wyniki Zawodów</a><a href="zawodnicy.html">Statystyki indywidualne</a><a href="transfery.html">Transfery i kontuzje</a>
-      <button id="themeToggle" class="theme-toggle" type="button" title="Tryb ciemny">☾</button>
-    </nav>
-  </div></header>
-
-  <main class="page">
-    <section class="card home-hero"><h1>Wyniki meczów</h1><p>Przejrzysta strona główna z odnośnikami do osobnych podstron meczowych.</p></section>
-    <div class="league"><span>Świat: mecze towarzyskie</span><span>Sezon 2026</span></div>
-    <section class="card">
-      <h2 class="home-title">Wszystkie mecze</h2>
-      <div class="season-tabs" aria-label="Wybór sezonu">
-        <button class="season-button" type="button" data-season="season-2026">Sezon 2026</button>
-        <button class="season-button active" type="button" data-season="season-2026-2027">Sezon 2026/2027</button>
-      </div>
-
-      <div id="season-2026" class="season-panel">
-        <div class="match-board">
-          <a class="match-link featured" href="mecz-ola-pero-koteu-kreweda-vienna.html"><span class="match-time">20:55</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Podstrona</span><span>Świat: mecze towarzyskie</span></span><span class="match-team"><span>Ola / Pero / Koteu</span><span class="match-score">6</span></span><span class="match-team winner"><span>Kreweda / Vienna</span><span class="match-score">9</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz2.html"><span class="match-time">21:40</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Liga Stromej Kolejka I</span></span><span class="match-team"><span>Jugosławianka FC</span><span class="match-score">2</span></span><span class="match-team winner"><span>Stromianka FC</span><span class="match-score">3</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz3.html"><span class="match-time">20:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span><span class="match-team"><span>Vienna i Luśken</span><span class="match-score">3</span></span><span class="match-team winner"><span>Koteu i Serduszkowata</span><span class="match-score">0</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz5.html"><span class="match-time">20:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Karne</span><span>Świat: mecze towarzyskie</span></span><span class="match-team"><span>Kreweda i Pero</span><span class="match-score">1 (1)</span></span><span class="match-team winner"><span>Luśken i Serduszkowata</span><span class="match-score">1 (0)</span></span></span><span class="match-status">Koniec po rzutach karnych</span></a>
-          <a class="match-link" href="mecz4.html"><span class="match-time">18:40</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Liga Stromej II Kolejka</span></span><span class="match-team"><span>Stromianka FC</span><span class="match-score">1</span></span><span class="match-team winner"><span>Jugosławianka</span><span class="match-score">3</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz7.html"><span class="match-time">19:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Puchar Stromej Dywizja B</span></span><span class="match-team"><span>Kreweda</span><span class="match-score">7</span></span><span class="match-team winner"><span>Luśken</span><span class="match-score">4</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz6.html"><span class="match-time">20:00</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Puchar Stromej Dywizja A</span></span><span class="match-team"><span>Vienna</span><span class="match-score">2</span></span><span class="match-team winner"><span>Pero</span><span class="match-score">5</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz8.html"><span class="match-time">20:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Puchar Stromej Dywizja B</span></span><span class="match-team"><span>Kreweda</span><span class="match-score">4</span></span><span class="match-team winner"><span>Ola</span><span class="match-score">1</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz9.html"><span class="match-time">18:45</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span><span class="match-team"><span>Kreweda i Luśken</span><span class="match-score">4</span></span><span class="match-team winner"><span>Vienna</span><span class="match-score">3</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz12.html"><span class="match-time">18:20</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: mecze towarzyskie</span></span><span class="match-team"><span>Reprezentacja Stromej</span><span class="match-score">10</span></span><span class="match-team winner"><span>Reprezentacja ul. Stromej U16</span><span class="match-score">8</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz14.html"><span class="match-time">19:20</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Puchar Stromej Dywizja B</span></span><span class="match-team"><span>Ola</span><span class="match-score">5</span></span><span class="match-team winner"><span>Luśken</span><span class="match-score">2</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz15.html"><span class="match-time">20:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Ola i Luśken</span><span class="match-score">10</span></span><span class="match-team winner"><span>Kreweda i Vienna</span><span class="match-score">12</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz16.html"><span class="match-time">20:00</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Kreweda i Pero</span><span class="match-score">13</span></span><span class="match-team winner"><span>Vienna</span><span class="match-score">15</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz17.html"><span class="match-time">21:00</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Kreweda i Luśken</span><span class="match-score">3</span></span><span class="match-team winner"><span>Vienna i Ola</span><span class="match-score">6</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz18.html"><span class="match-time">20:40</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Kreweda, Luśken i Ola</span><span class="match-score">5</span></span><span class="match-team winner"><span>Vienna i Pero</span><span class="match-score">5</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz19.html"><span class="match-time">20:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Kreweda, Luśken i Ola</span><span class="match-score">6</span></span><span class="match-team winner"><span>Vienna</span><span class="match-score">4</span></span></span><span class="match-status">Koniec</span></a>
-        </div>
-      </div>
-
-      <div id="season-2026-2027" class="season-panel active">
-        <div class="match-board">
-        <a class="match-link" href="mecz271.html"><span class="match-time">19:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Pero i Luśken</span><span class="match-score">5</span></span><span class="match-team winner"><span>Vienna, Ola i Kreweda</span><span class="match-score">4</span></span></span><span class="match-status">Koniec</span></a>
-           <a class="match-link" href="mecz272.html"><span class="match-time">19:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Ola i Luśken</span><span class="match-score">0</span></span><span class="match-team winner"><span> Kreweda</span><span class="match-score">1</span></span></span><span class="match-status">Koniec</span></a>
-           <a class="match-link" href="mecz273.html"><span class="match-time">19:10</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Pero i Kreweda</span><span class="match-score">5</span></span><span class="match-team winner"><span> Vienna i Ola</span><span class="match-score">5</span></span></span><span class="match-status">Koniec</span></a>
-           <a class="match-link" href="mecz274.html"><span class="match-time">19:00</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Vienna i Kreweda</span><span class="match-score">8</span></span><span class="match-team winner"><span> Luśken i Ola</span><span class="match-score">3</span></span></span><span class="match-status">Koniec</span></a>
-          <a class="match-link" href="mecz275.html"><span class="match-time">19:00</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Luśken i  Kreweda</span><span class="match-score">5</span></span><span class="match-team winner"><span> Vienna i Ola</span><span class="match-score">8</span></span></span><span class="match-status">Koniec</span></a>
-       <a class="match-link" href="mecz276.html"><span class="match-time">19:30</span><span class="match-teams"><span class="match-mini-meta"><span class="match-pill">Mecz</span><span>Świat: Mecz Towarzyski</span></span><span class="match-team"><span>Ola i Kreweda</span><span class="match-score">5</span></span><span class="match-team winner"><span> Luśken i Vienna</span><span class="match-score">7</span></span></span><span class="match-status">Koniec</span></a>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-      </div>
-    </section>
-    <button class="install" type="button" onclick="showInstallInfo()">📲 Zainstaluj aplikację</button>
-  </main>
-
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-    function applyTheme(theme) {
-      document.body.classList.toggle('dark', theme === 'dark');
-      themeToggle.textContent = theme === 'dark' ? '☀' : '☾';
-      localStorage.setItem('flasstromaTheme', theme);
-    }
-    themeToggle.addEventListener('click', () => applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark'));
-    applyTheme(localStorage.getItem('flasstromaTheme') || 'light');
-
-    document.querySelectorAll('.season-button').forEach((button) => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.season-button, .season-panel').forEach((item) => item.classList.remove('active'));
-        button.classList.add('active');
-        document.getElementById(button.dataset.season).classList.add('active');
-      });
-    });
-
-    function showInstallInfo() {
-      alert("Na iPhone:\n1. Kliknij Udostępnij\n2. Wybierz 'Do ekranu głównego'\n\nNa Androidzie pojawi się opcja instalacji automatycznie.");
-    }
-  </script>
+<header class="topbar"><div class="in">
+<div class="bar"><div class="logo"><span class="mark"></span>Flashscore</div><button id="themeToggle" class="theme" type="button" title="Tryb ciemny">☾</button></div>
+<nav class="nav"><a class="active" href="index.html">Wyniki</a><a href="wiadomosci.html">Wiadomości</a><a href="kluby.html">Drużyny</a><a href="wyniki.html">Wyniki Zawodów</a><a href="zawodnicy.html">Statystyki indywidualne</a><a href="transfery.html">Transfery i kontuzje</a></nav>
+</div></header>
+<main class="page">
+<div class="chips" id="views"></div>
+<div class="chips sub" id="seasons"></div>
+<div class="chips sub" id="filters"></div>
+<div id="out"></div>
+<button class="install" type="button" onclick="showInstallInfo()">📲 Zainstaluj aplikację</button>
+</main>
+<script>
+// DANE — jedno miejsce do edycji. Pola: sezon, godzina, rozgrywki, gospodarz, gole, gość, gole, plik, notatka
+var S1="2026",S2="2026/2027";
+var T="Mecz Towarzyski",FR="Świat: mecze towarzyskie",LS="Świat: Liga Stromej",PA="Świat: Puchar Stromej Dywizja A",PB="Świat: Puchar Stromej Dywizja B";
+var M=[
+[S1,"20:55",FR,"Ola / Pero / Koteu",6,"Kreweda / Vienna",9,"mecz-ola-pero-koteu-kreweda-vienna.html",""],
+[S1,"21:40",LS,"Jugosławianka FC",2,"Stromianka FC",3,"mecz2.html","Kolejka I"],
+[S1,"20:30",FR,"Vienna i Luśken",3,"Koteu i Serduszkowata",0,"mecz3.html",""],
+[S1,"20:30",FR,"Kreweda i Pero",1,"Luśken i Serduszkowata",1,"mecz5.html","Karne 1:0"],
+[S1,"18:40",LS,"Stromianka FC",1,"Jugosławianka FC",3,"mecz4.html","Kolejka II"],
+[S1,"19:30",PB,"Kreweda",7,"Luśken",4,"mecz7.html",""],
+[S1,"20:00",PA,"Vienna",2,"Pero",5,"mecz6.html",""],
+[S1,"20:30",PB,"Kreweda",4,"Ola",1,"mecz8.html",""],
+[S1,"18:45",FR,"Kreweda i Luśken",4,"Vienna",3,"mecz9.html",""],
+[S1,"18:20",FR,"Reprezentacja Stromej",10,"Reprezentacja ul. Stromej U16",8,"mecz12.html",""],
+[S1,"19:20",PB,"Ola",5,"Luśken",2,"mecz14.html",""],
+[S1,"20:30",T,"Ola i Luśken",10,"Kreweda i Vienna",12,"mecz15.html",""],
+[S1,"20:00",T,"Kreweda i Pero",13,"Vienna",15,"mecz16.html",""],
+[S1,"21:00",T,"Kreweda i Luśken",3,"Vienna i Ola",6,"mecz17.html",""],
+[S1,"20:40",T,"Kreweda, Luśken i Ola",5,"Vienna i Pero",5,"mecz18.html",""],
+[S1,"20:30",T,"Kreweda, Luśken i Ola",6,"Vienna",4,"mecz19.html",""],
+[S2,"19:30",T,"Pero i Luśken",5,"Vienna, Ola i Kreweda",4,"mecz271.html",""],
+[S2,"19:30",T,"Ola i Luśken",0,"Kreweda",1,"mecz272.html",""],
+[S2,"19:10",T,"Pero i Kreweda",5,"Vienna i Ola",5,"mecz273.html",""],
+[S2,"19:00",T,"Vienna i Kreweda",8,"Luśken i Ola",3,"mecz274.html",""],
+[S2,"19:00",T,"Luśken i Kreweda",5,"Vienna i Ola",8,"mecz275.html",""],
+[S2,"19:30",T,"Ola i Kreweda",5,"Luśken i Vienna",7,"mecz276.html",""]
+];
+var tab="m",season=S2,flt="all",fav={};
+try{fav=JSON.parse(localStorage.getItem("flasstromaFav")||"{}")}catch(e){}
+var $=function(i){return document.getElementById(i)};
+function lgName(c){return c==FR||c==T?FR:c}
+function chips(id,list,cur,key){
+ $(id).innerHTML=list.map(function(x){return '<button class="'+(cur==x[0]?"on":"")+'" data-k="'+key+'" data-v="'+x[0]+'">'+x[1]+'</button>'}).join("");
+}
+function matches(){
+ var g={},h="";
+ M.forEach(function(m,i){
+  if(m[0]!=season||(flt=="fav"&&!fav[i]))return;
+  var k=lgName(m[2]);(g[k]=g[k]||[]).push(i);
+ });
+ [LS,PA,PB,FR].forEach(function(k){
+  if(!g[k])return;
+  h+='<div class="lg"><h3><span>'+k+'</span><span>'+g[k].length+'</span></h3>';
+  g[k].forEach(function(i){
+   var m=M[i],a=m[4]>m[6],b=m[6]>m[4];
+   h+='<a class="m" href="'+m[7]+'"><div><div class="t">'+m[1]+'</div><div class="fin">'+(m[8].indexOf("Karne")==0?"Karne":"Koniec")+'</div></div><div class="tm"><div class="'+(a?"w":"")+'">'+m[3]+'</div><div class="'+(b?"w":"")+'">'+m[5]+'</div></div><div class="sc"><div class="'+(a?"w":"")+'">'+m[4]+'</div><div class="'+(b?"w":"")+'">'+m[6]+'</div></div><button class="st'+(fav[i]?" on":"")+'" data-s="'+i+'">'+(fav[i]?"★":"☆")+'</button></a>';
+  });
+  h+='</div>';
+ });
+ return h||'<div class="empty">Brak meczów</div>';
+}
+function tbl(k,title){
+ var t={};
+ M.forEach(function(m){
+  if(m[2]!=k)return;
+  [[m[3],m[4],m[6]],[m[5],m[6],m[4]]].forEach(function(x){
+   var r=t[x[0]]=t[x[0]]||{n:x[0],m:0,w:0,d:0,l:0,f:0,a:0,p:0};
+   r.m++;r.f+=x[1];r.a+=x[2];
+   if(x[1]>x[2]){r.w++;r.p+=3}else if(x[1]==x[2]){r.d++;r.p++}else r.l++;
+  });
+ });
+ var a=Object.keys(t).map(function(n){return t[n]}).sort(function(x,y){return y.p-x.p||(y.f-y.a)-(x.f-x.a)||y.f-x.f});
+ var h='<div class="lg"><h3><span>'+title+'</span></h3><table><tr><th>#</th><th>Drużyna</th><th>M</th><th>Z</th><th>R</th><th>P</th><th>Bramki</th><th>Pkt</th></tr>';
+ a.forEach(function(r,i){h+='<tr><td>'+(i+1)+'</td><td>'+r.n+'</td><td>'+r.m+'</td><td>'+r.w+'</td><td>'+r.d+'</td><td>'+r.l+'</td><td>'+r.f+':'+r.a+'</td><td><b>'+r.p+'</b></td></tr>'});
+ return h+'</table></div>';
+}
+var h2a="Kreweda",h2b="Vienna";
+function teams(){
+ var s={};M.forEach(function(m){[m[3],m[5]].forEach(function(n){s[n]=1})});
+ return Object.keys(s).sort();
+}
+function h2h(){
+ var ts=teams(),opt=function(v){return ts.map(function(n){return '<option'+(n==v?" selected":"")+'>'+n+'</option>'}).join("")};
+ var h='<div class="lg"><h3><span>Bezpośrednie spotkania (H2H)</span></h3><div class="sel"><select id="ha">'+opt(h2a)+'</select><select id="hb">'+opt(h2b)+'</select></div>',n=0,w=[0,0,0];
+ M.forEach(function(m){
+  var f=(m[3]==h2a&&m[5]==h2b),r=(m[3]==h2b&&m[5]==h2a);
+  if(!f&&!r)return;n++;
+  var x=f?m[4]:m[6],y=f?m[6]:m[4];w[x>y?0:x==y?1:2]++;
+  h+='<a class="m" style="grid-template-columns:46px 1fr 40px" href="'+m[7]+'"><div class="t">'+m[0]+'</div><div class="tm"><div>'+m[3]+'</div><div>'+m[5]+'</div></div><div class="sc"><div>'+m[4]+'</div><div>'+m[6]+'</div></div></a>';
+ });
+ if(!n)h+='<div class="empty">Te drużyny nie grały ze sobą (jako pojedyncze składy)</div>';
+ else h='<div class="lg"><h3><span>'+h2a+' '+w[0]+' · remisy '+w[1]+' · '+w[2]+' '+h2b+'</span></h3></div>'+h;
+ return h+'</div>';
+}
+function draw(){
+ chips("views",[["m","Mecze"],["t","Tabele"],["h","H2H"]],tab,"tab");
+ $("seasons").style.display=tab=="m"?"flex":"none";
+ $("filters").style.display=tab=="m"?"flex":"none";
+ chips("seasons",[[S1,"Sezon 2026"],[S2,"Sezon 2026/2027"]],season,"season");
+ chips("filters",[["all","Wszystkie"],["fav","Ulubione ★"]],flt,"flt");
+ $("out").innerHTML=tab=="m"?matches():tab=="t"?tbl(LS,"Liga Stromej")+tbl(PA,"Puchar Stromej — Dywizja A")+tbl(PB,"Puchar Stromej — Dywizja B"):h2h();
+ if(tab=="h"){$("ha").onchange=function(){h2a=this.value;draw()};$("hb").onchange=function(){h2b=this.value;draw()}}
+}
+document.addEventListener("click",function(e){
+ var t=e.target;
+ if(t.dataset.s){e.preventDefault();var i=t.dataset.s;fav[i]=!fav[i];try{localStorage.setItem("flasstromaFav",JSON.stringify(fav))}catch(x){}draw();return}
+ if(t.dataset.k){var k=t.dataset.k,v=t.dataset.v;if(k=="tab")tab=v;if(k=="season")season=v;if(k=="flt")flt=v;draw()}
+});
+var tg=$("themeToggle");
+function applyTheme(t){document.body.classList.toggle("dark",t=="dark");tg.textContent=t=="dark"?"☀":"☾";try{localStorage.setItem("flasstromaTheme",t)}catch(e){}}
+tg.addEventListener("click",function(){applyTheme(document.body.classList.contains("dark")?"light":"dark")});
+var th="light";try{th=localStorage.getItem("flasstromaTheme")||"light"}catch(e){}
+applyTheme(th);
+function showInstallInfo(){alert("Na iPhone:\n1. Kliknij Udostępnij\n2. Wybierz 'Do ekranu głównego'\n\nNa Androidzie pojawi się opcja instalacji automatycznie.")}
+draw();
+</script>
 </body>
 </html>
